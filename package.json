@@ -1,0 +1,13 @@
+{
+  "name": "listune-guides",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official Listune Documentation",
+  "scripts": {
+    "build": "retype build",
+    "start": "retype start"
+  },
+  "devDependencies": {
+    "retypeapp": "^3.6.0"
+  }
+}
