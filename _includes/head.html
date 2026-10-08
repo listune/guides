@@ -1,0 +1,456 @@
+<script data-cfasync="false">
+  (function() {
+    function enforceDark() {
+      if (document.documentElement) {
+        document.documentElement.classList.remove('light');
+        if (!document.documentElement.classList.contains('dark')) {
+          document.documentElement.classList.add('dark');
+        }
+      }
+      try {
+        localStorage.setItem('retype_scheme', 'dark');
+      } catch (e) {}
+
+      var btn = document.getElementById('retype-scheme-button');
+      if (btn && btn.parentNode) {
+        btn.parentNode.removeChild(btn);
+      }
+      var sw = document.querySelector('doc-theme-switch');
+      if (sw && sw.parentNode) {
+        sw.parentNode.removeChild(sw);
+      }
+      var menus = document.querySelectorAll('.scheme-menu, .scheme-menu-item');
+      for (var i = 0; i < menus.length; i++) {
+        if (menus[i].parentNode) menus[i].parentNode.removeChild(menus[i]);
+      }
+    }
+
+    enforceDark();
+    document.addEventListener('DOMContentLoaded', enforceDark);
+    window.addEventListener('load', enforceDark);
+
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function() {
+        enforceDark();
+      });
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+    }
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* Permanently eliminate Theme Switcher (Light, Dark, System) */
+  doc-theme-switch,
+  .doc-theme-switch,
+  #retype-scheme-button,
+  [id="retype-scheme-button"],
+  .scheme-menu,
+  .scheme-menu-item,
+  button[aria-label*="theme"],
+  button[aria-label*="Theme"],
+  button[aria-label*="change theme"],
+  button[aria-label*="Change theme"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  /* Listune Brand Design System */
+  :root, .dark {
+    /* Brand Accent Colors */
+    --listune-pink: #ec4899;
+    --listune-pink-light: #f472b6;
+    --listune-pink-dark: #db2777;
+    --listune-pink-tint: rgba(236, 72, 153, 0.12);
+    --listune-pink-tint-hover: rgba(236, 72, 153, 0.22);
+    --listune-pink-border: rgba(236, 72, 153, 0.3);
+
+    /* Neutral Dark Surfaces - Clean Listune charcoal & pitch black, eliminating bluish/navy tints */
+    --base-bg: #090b0e;
+    --body-bg: #090b0e;
+    --header-bg: #090b0e;
+    --sidebar-left-bg: #0e1217;
+    --sidebar-right-bg: #090b0e;
+    --search-modal-bg: #13171f;
+    --search-results-bg: #13171f;
+    --card-bg: #13171f;
+    --card-image-bg: #181d27;
+
+    /* Neutral Dark Borders - No slate blue */
+    --base-border: rgba(255, 255, 255, 0.08);
+    --base-border-hover: rgba(236, 72, 153, 0.35);
+    --base-border-strong: rgba(255, 255, 255, 0.15);
+    --header-border: rgba(255, 255, 255, 0.08);
+    --sidebar-left-border: rgba(255, 255, 255, 0.08);
+    --search-border: rgba(255, 255, 255, 0.1);
+    --search-border-hover: #ec4899;
+    --search-border-focus: #ec4899;
+    --search-modal-border: rgba(255, 255, 255, 0.1);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-border-hover: rgba(236, 72, 153, 0.4);
+
+    /* Text & Navigation */
+    --base-text: #e2e8f0;
+    --base-text-strong: #ffffff;
+    --base-text-muted: #94a3b8;
+    --heading-text: #ffffff;
+    --header-text: #e2e8f0;
+    --header-text-hover: #f472b6;
+    
+    /* Sidebar Item States */
+    --nav-item-text: #94a3b8;
+    --nav-item-text-stack: #ffffff;
+    --base-item-text-active: #f472b6;
+    --base-item-bg-hover: rgba(255, 255, 255, 0.05);
+    --base-item-bg-active: rgba(236, 72, 153, 0.12);
+
+    /* Selection & Search Highlights - Listune Pink */
+    --selection-bg: rgba(236, 72, 153, 0.35);
+    --selection-text: #ffffff;
+    --search-highlight-bg: rgba(236, 72, 153, 0.25);
+    --search-result-active-ring: #ec4899;
+    --selector: #ec4899;
+
+    /* Content Links and URLs: Kept distinctly blue as requested */
+    --body-link: #38bdf8;
+    --body-link-hover: #60a5fa;
+    --base-link: #38bdf8;
+    --base-link-hover: #60a5fa;
+    --body-link-decoration-color: rgba(56, 189, 248, 0.4);
+    --body-link-decoration-color-hover: #60a5fa;
+
+    --listune-radius: 14px;
+    --listune-radius-sm: 8px;
+    --listune-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --listune-font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    font-family: var(--listune-font-body);
+    background-color: #090b0e !important;
+    color: #e2e8f0 !important;
+  }
+
+  /* Structural UI Container Overrides */
+  #retype-header {
+    background-color: rgba(9, 11, 14, 0.95) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+
+  #retype-sidebar-left {
+    background-color: #0e1217 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  #retype-content {
+    background-color: #090b0e !important;
+  }
+
+  /* Header Navigation Links */
+  #retype-header-nav a {
+    color: #e2e8f0 !important;
+    text-decoration: none !important;
+    transition: color 0.15s ease;
+  }
+
+  #retype-header-nav a:hover {
+    color: #f472b6 !important;
+  }
+
+  /* Sidebar Active & Hover States - Pure Listune Pink, no blue */
+  .dark [data-state="active"],
+  .dark a[aria-current="page"],
+  .dark .text-base-item-text-active {
+    color: #f472b6 !important;
+    background-color: rgba(236, 72, 153, 0.12) !important;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+
+  .dark [data-state="active"] svg,
+  .dark a[aria-current="page"] svg,
+  .dark [data-state="active"] path,
+  .dark a[aria-current="page"] path {
+    color: #f472b6 !important;
+    fill: currentColor !important;
+  }
+
+  #retype-sidebar-left a {
+    text-decoration: none !important;
+  }
+
+  #retype-sidebar-left a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Content Links and URLs: Strictly styled in vibrant accessible blue */
+  .prose a:not([class*="listune-btn"]):not([class*="listune-card"]),
+  .text-body-link,
+  table a,
+  p a,
+  li a:not([class*="listune-btn"]):not([class*="listune-card"]) {
+    color: #38bdf8 !important;
+    text-decoration: underline;
+    text-decoration-color: rgba(56, 189, 248, 0.4);
+    text-underline-offset: 3px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+
+  .prose a:not([class*="listune-btn"]):not([class*="listune-card"]):hover,
+  .text-body-link:hover,
+  table a:hover,
+  p a:hover,
+  li a:not([class*="listune-btn"]):not([class*="listune-card"]):hover {
+    color: #60a5fa !important;
+    text-decoration-color: #60a5fa !important;
+  }
+
+  /* Code block & Search backgrounds: neutral dark charcoal */
+  pre, code {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .dark pre {
+    background-color: #13171f !important;
+  }
+
+  #retype-search-modal,
+  .search-modal {
+    background-color: #13171f !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Custom Listune Components */
+  .listune-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--listune-pink-tint);
+    color: var(--listune-pink-light);
+    border: 1px solid var(--listune-pink-border);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: var(--listune-font-display);
+    margin-bottom: 12px;
+  }
+
+  .listune-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--listune-pink);
+  }
+
+  .listune-hero {
+    background: linear-gradient(160deg, rgba(236, 72, 153, 0.08) 0%, rgba(19, 23, 31, 0.95) 45%, rgba(9, 11, 14, 0.98) 100%);
+    border: 1px solid var(--base-border);
+    border-radius: var(--listune-radius);
+    padding: 36px 32px;
+    margin: 20px 0 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .listune-hero-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .listune-hero-logo {
+    height: 38px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+  }
+
+  .listune-hero-headline {
+    font-family: var(--listune-font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin: 0 0 12px 0;
+  }
+
+  .listune-hero-lead {
+    font-size: 1.05rem;
+    color: var(--base-text-muted);
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0;
+  }
+
+  /* Quick Actions Bar */
+  .listune-quickbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 32px 0;
+    padding: 16px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--base-border);
+    border-radius: var(--listune-radius);
+  }
+
+  .listune-quickbar-title {
+    font-family: var(--listune-font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--base-text-muted);
+    margin-right: 4px;
+  }
+
+  .listune-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--listune-pink);
+    color: #ffffff !important;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .listune-btn-primary:hover {
+    background: var(--listune-pink-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(236, 72, 153, 0.35);
+  }
+
+  .listune-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff !important;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none !important;
+    border: 1px solid var(--base-border);
+    transition: all 0.2s ease;
+  }
+
+  .listune-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  /* Grid Layouts */
+  .listune-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 20px 0;
+  }
+
+  .listune-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 20px 0;
+  }
+
+  @media (max-width: 860px) {
+    .listune-grid-2, .listune-grid-3 {
+      grid-template-columns: 1fr;
+    }
+    .listune-hero-headline {
+      font-size: 1.7rem;
+    }
+  }
+
+  /* Feature and Navigation Cards */
+  .listune-card {
+    background: var(--card-bg);
+    border: 1px solid var(--base-border);
+    border-radius: var(--listune-radius);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .listune-card:hover {
+    border-color: var(--listune-pink-border);
+    background: var(--card-image-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(236, 72, 153, 0.12);
+  }
+
+  .listune-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .listune-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--listune-radius-sm);
+    background: var(--listune-pink-tint);
+    color: var(--listune-pink-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .listune-card-title {
+    font-family: var(--listune-font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .listune-card-desc {
+    font-size: 0.88rem;
+    color: var(--base-text-muted);
+    line-height: 1.5;
+    margin: 0 0 14px 0;
+  }
+
+  .listune-card-arrow {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--listune-pink-light);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+</style>
